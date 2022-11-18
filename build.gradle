@@ -28,6 +28,61 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
+	testLogging {
+		events "passed", "failed", "skipped"
+	}
+}
+
+tasks.register("installFrontend", Exec) {
+	inputs.file(file("frontend/package-lock.json"))
+	inputs.file(file("frontend/package.json"))
+	outputs.dir(file("frontend/node_modules"))
+	commandLine("npm", "--prefix", "frontend", "install")
+}
+
+ tasks.register("buildFrontend", Exec) {
+	mustRunAfter(installFrontend)
+	inputs.dir(file("frontend"))
+	outputs.dir(file("frontend/build"))
+	commandLine("npm", "--prefix", "frontend", "run", "build")
+}
+
+tasks.register("copyFrontend", Sync) {
+	dependsOn(buildFrontend)
+	from(file("./frontend/build"))
+	into(file("$buildDir/resources/main/static"))
+	doLast {
+		println("Copied compiled frontend to static resources.")
+	}
+}
+//
+//tasks.register("copyFrontendForIntelliJ", Sync) {
+//	dependsOn(buildFrontend)
+//	from(file("./frontend/build"))
+//	into(file("./src/main/resources/static"))
+//	doLast {
+//		println("Copied compiled frontend to static resources.")
+//	}
+//}
+
+tasks.register("cleanFrontend", Delete) {
+	delete(file("./frontend/build"))
+}
+
+jar {
+	enabled = false
+}
+
+bootJar {
+	dependsOn(copyFrontend)
+}
+
+bootRun {
+	dependsOn(copyFrontend)
+}
+
+clean {
+	dependsOn(cleanFrontend)
 }
