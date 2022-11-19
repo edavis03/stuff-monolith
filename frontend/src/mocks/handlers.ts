@@ -6,7 +6,7 @@ export const handlers = [
         return res(
             ctx.status(200),
             ctx.json({
-                data: ["lamp", "sweatshirt", "kakapo"]
+                data: ["boots", "belt", "cowboy hat"]
             }),
         )
     }),
