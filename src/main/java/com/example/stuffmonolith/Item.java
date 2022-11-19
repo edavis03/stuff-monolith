@@ -3,6 +3,7 @@ package com.example.stuffmonolith;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
 public class Item {
     public Long id;
     public String name;
