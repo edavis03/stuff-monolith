@@ -1,5 +1,6 @@
 import React, {FormEvent, useEffect, useState} from 'react';
 import axios from 'axios';
+import { AxiosError } from 'axios';
 import {Item} from "./domain/Item";
 
 const App = () => {
@@ -21,6 +22,8 @@ const App = () => {
             .then((res) => {
                 console.log(res.data)
                 setStuff([...stuff, res.data])
+            })
+            .catch(() => {
             });
     }
 
