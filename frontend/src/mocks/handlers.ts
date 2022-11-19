@@ -1,12 +1,22 @@
 // src/mocks/handlers.js
-import { rest } from 'msw'
+import {DefaultRequestMultipartBody, ResponseComposition, rest} from 'msw'
+import {Item} from "../domain/Item";
+
+interface GetStuffResponseBody {
+    stuff: Item[]
+}
 
 export const handlers = [
-    rest.get('/stuff',(req,res, ctx) => {
+    rest.get('/stuff',(req,res:ResponseComposition<GetStuffResponseBody>, ctx) => {
         return res(
             ctx.status(200),
             ctx.json({
-                stuff: ["boots", "belt", "cowboy hat"]
+                stuff:
+                    [
+                        {id: 1, name: "boots"},
+                        {id: 2, name: "belt"},
+                        {id: 3, name: "cowboy hat"},
+                    ]
             }),
         )
     }),

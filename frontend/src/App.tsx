@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import {Item} from "./domain/Item";
 
 const App = () => {
-    const [stuff, setStuff] = useState([]);
+    const [stuff, setStuff] = useState<Item[]>([]);
 
     useEffect(() => {
             axios.get('/stuff')
@@ -18,7 +19,7 @@ const App = () => {
         <div className="App">
             <header>Stuff</header>
             <ul>
-                {stuff.map(item => <li key={item}>{item}</li>)}
+                {stuff.map(item => <li key={item.id}>{item.name}</li>)}
             </ul>
         </div>
     );
