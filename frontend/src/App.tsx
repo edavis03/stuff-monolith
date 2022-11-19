@@ -1,6 +1,5 @@
-import React, {FormEvent, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { AxiosError } from 'axios';
 import {Item} from "./domain/Item";
 
 const App = () => {
@@ -11,7 +10,6 @@ const App = () => {
         axios.get('/stuff')
             .then(res => {
                 const {data} = res;
-                console.log(data)
                 setStuff(data);
             })
     }
@@ -20,7 +18,6 @@ const App = () => {
         event.preventDefault();
         axios.post('/stuff', {name: newItemName})
             .then((res) => {
-                console.log(res.data)
                 setStuff([...stuff, res.data])
             })
             .catch(() => {

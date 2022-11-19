@@ -37,8 +37,6 @@ it('should allow adding an item to the closet', async () => {
     userEvent.type(screen.getByLabelText(/item to add/i), 'junk');
     userEvent.click(screen.getByRole('button', {name: /put in closet/i}));
 
-
-
     expect(await screen.findByText(/junk/i)).toBeInTheDocument();
 })
 
@@ -54,8 +52,6 @@ it('should not list the new item if adding failed', async () => {
 
     userEvent.type(screen.getByLabelText(/item to add/i), 'junk');
     userEvent.click(screen.getByRole('button', {name: /put in closet/i}));
-
-
 
     expect(await screen.queryByText(/junk/i)).not.toBeInTheDocument();
 })
