@@ -83,6 +83,10 @@ bootRun {
 	dependsOn(copyFrontend)
 }
 
+bootRunMainClassName {
+	dependsOn(copyFrontend)
+}
+
 clean {
 	dependsOn(cleanFrontend)
 }
