@@ -1,14 +1,45 @@
 import React from 'react';
-import { render, screen} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import App from './App';
+import userEvent from "@testing-library/user-event";
+import {getStuffHandler, postStuffHandler} from "./mocks/handlerFactory";
+import setUpMSW from "./mocks/setUpMSW";
+
+const server = setUpMSW();
 
 it('should display stuff', async () => {
-  render(<App />);
-  expect(screen.getByText(/stuff/i)).toBeInTheDocument();
+    const stuff = [
+        {id: 1, name: "boots"},
+        {id: 2, name: "belt"},
+        {id: 3, name: "cowboy hat"},
+    ];
+    server.use(getStuffHandler(stuff))
 
-  expect(await screen.findByText(/boots/i)).toBeInTheDocument();
-  expect(await screen.findByText(/belt/i)).toBeInTheDocument();
-  expect(await screen.findByText(/cowboy hat/i)).toBeInTheDocument();
+    render(<App/>);
+
+    expect(screen.getByText(/stuff/i)).toBeInTheDocument();
+
+    expect(await screen.findByText(/boots/i)).toBeInTheDocument();
+    expect(await screen.findByText(/belt/i)).toBeInTheDocument();
+    expect(await screen.findByText(/cowboy hat/i)).toBeInTheDocument();
 });
+
+it('should allow adding an item to the closet', async () => {
+    const stuff = [
+        {id: 1, name: "boots"},
+        {id: 2, name: "belt"},
+        {id: 3, name: "cowboy hat"},
+    ];
+    server.use(getStuffHandler(stuff), postStuffHandler('junk', 4))
+
+    render(<App/>);
+
+    userEvent.type(screen.getByLabelText(/item to add/i), 'junk');
+    userEvent.click(screen.getByRole('button', {name: /put in closet/i}));
+
+
+
+    expect(await screen.findByText(/junk/i)).toBeInTheDocument();
+})
 
 export {}
