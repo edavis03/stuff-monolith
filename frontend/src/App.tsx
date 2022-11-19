@@ -9,7 +9,7 @@ const App = () => {
             axios.get('/stuff')
                 .then(res => {
                     const {data} = res;
-                    setStuff(data.stuff);
+                    setStuff(data);
                 })
         },
         []
